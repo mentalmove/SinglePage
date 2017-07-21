@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Single Page</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <style type="text/css">
+            html, body {
+                margin: 0px;
+                font-family: Arial, Verdana;
+                height: 100%;
+                overflow: visible;
+            }
+
+            .section {
+                position: relative;
+                background-color: #F6F6F6;
+                min-height: 100%;
+            }
+            .inner {
+                text-align: center;
+                padding-top: 25%;
+            }
+
+            /*  */
+
+            .explanation {
+                z-index: 1;
+                position: absolute;
+                left: 2%;
+                top: 2%;
+                width: 92%;
+                min-height: 88%;
+                padding: 2%;
+                border-radius: 20px;
+                background-color: #EEEEEE;
+                opacity: 0.92;
+            }
+
+            input.hackbox {
+                display:none;
+            }
+
+            label.close_explanation {
+                position: absolute;
+                top: 4px;
+                right: 4px;
+                font-family: Verdana;
+                font-size: 48px;
+                cursor: pointer;
+                color: #444444;
+            }
+
+            input.close_explanation:checked ~ div.explanation {
+                display: none;
+            }
+        </style>
+
+    </head>
+    <body>
+
+        <input type="checkbox" class="hackbox close_explanation" autocomplete="off" id="close_explanation">
+
+        <div class="explanation">
+            <label class="close_explanation" for="close_explanation">&nbsp;x&nbsp;</label>
+            Hello, world!
+        </div>
+
+        <div class="section" style="">
+            <div class="inner">
+                Part 1
+            </div>
+        </div>
+
+        <div class="section" style="background-color: #EAEAEA">
+            <div class="inner">
+                Part 2
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="inner">
+                Part 3
+            </div>
+        </div>
+
+    </body>
+</html>
