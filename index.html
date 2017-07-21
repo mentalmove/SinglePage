@@ -26,12 +26,13 @@
             /*  */
 
             .explanation {
+                display: none;
                 position: absolute;
                 left: 2%;
                 top: 2%;
                 width: 92%;
                 min-height: 88%;
-                font-size: 2em;
+                font-size: 3em;
                 padding: 2%;
                 border-radius: 20px;
                 background-color: #EEEEEE;
@@ -47,17 +48,35 @@
                 color: #444444;
             }
         </style>
-        
+
         <script type="text/javascript">
-            
+
             function close_explanation (pseudo_button) {
                 pseudo_button.parentNode.style.display = "none";
             }
-            
+
+            function explanation_loaded (receiveReq) {
+                if ( receiveReq.readyState == 4 && (receiveReq.response || receiveReq.responseText) ) {
+                    var response = receiveReq.response || receiveReq.responseText;
+                    document.getElementById("explanation_content").innerHTML = response;
+                    document.getElementsByClassName("explanation")[0].style.display = "block";
+                }
+            }
+            function load_explanation () {
+                var receiveReq = new XMLHttpRequest();
+                if ( receiveReq.readyState == 4 || receiveReq.readyState == 0 ) {
+                    receiveReq.open("GET", "explanation.html", true);
+                    receiveReq.onreadystatechange = function () {
+                        explanation_loaded(receiveReq);
+                    };
+                    receiveReq.send(null);
+                }
+            }
+
         </script>
 
     </head>
-    <body>
+    <body onload="load_explanation()">
 
         <div class="section" style="">
             <div class="inner">
@@ -76,38 +95,11 @@
                 Part 3
             </div>
         </div>
-        
+
         <div class="explanation">
             <span class="close_explanation" onclick="close_explanation(this)">&nbsp;x&nbsp;</span>
             <br>
-            Sometimes, Javascript is easier than CSS
-            (and leads to even more valid code when unwanted
-            browser cleverness shall be circumvented).
-            <br><br>
-            The overlay holds a simple <b><i>span</i></b> - tag
-            working as a button; when clicked, it informs
-            <br>
-            <span style="font-size: 0.8em; padding-left: 24px">function</span> <tt style="font-size: 0.8em">close_explanation()</tt>
-            <br>
-            about itself. <tt style="font-size: 0.8em">close_explanation()</tt>
-            forces the argument's parent node
-            (i.e. the overlay) to disappear.
-            <br><br>
-            To hide the overlay permanently for own experiments,
-            <br>
-            <tt style="font-size: 0.8em; padding-left: 24px">display: none;</tt>
-            <br>
-            can be added to the properties of class <i>explanation</i>.
-            <br>
-            Alternatively, something like
-            <pre style="font-size: 0.8em; padding-left: 24px">&lt;script type="text/javascript"&gt;
-            document.getElementsByClassName("explanation")[0].style.display = "none";
-&lt;/script&gt;</pre>
-            or
-            <pre style="font-size: 0.8em; padding-left: 24px">&lt;script type="text/javascript"&gt;
-            close_explanation( document.getElementsByClassName("close_explanation")[0] );
-&lt;/script&gt;</pre>
-            could be written below the <b><i>div</i></b> - tag holding the explanation.
+            <span id="explanation_content"></span>
         </div>
 
     </body>
