@@ -85,7 +85,29 @@
             browser cleverness shall be circumvented).
             <br><br>
             The overlay holds a simple <b><i>span</i></b> - tag
-            working as a button; 
+            working as a button; when clicked, it informs
+            <br>
+            <span style="font-size: 0.8em; padding-left: 24px">function</span> <tt style="font-size: 0.8em">close_explanation()</tt>
+            <br>
+            about itself. <tt style="font-size: 0.8em">close_explanation()</tt>
+            forces the argument's parent node
+            (i.e. the overlay) to disappear.
+            <br><br>
+            To hide the overlay permanently for own experiments,
+            <br>
+            <tt style="font-size: 0.8em; padding-left: 24px">display: none;</tt>
+            <br>
+            can be added to the properties of class <i>explanation</i>.
+            <br>
+            Alternatively, something like
+            <pre style="font-size: 0.8em; padding-left: 24px">&lt;script type="text/javascript"&gt;
+            document.getElementsByClassName("explanation")[0].style.display = "none";
+&lt;/script&gt;</pre>
+            or
+            <pre style="font-size: 0.8em; padding-left: 24px">&lt;script type="text/javascript"&gt;
+            close_explanation( document.getElementsByClassName("close_explanation")[0] );
+&lt;/script&gt;</pre>
+            could be written below the <b><i>div</i></b> - tag holding the explanation.
         </div>
 
     </body>
