@@ -32,6 +32,7 @@
                 top: 2%;
                 width: 92%;
                 min-height: 88%;
+                font-size: 2em;
                 padding: 2%;
                 border-radius: 20px;
                 background-color: #EEEEEE;
@@ -41,7 +42,6 @@
             input.hackbox {
                 display:none;
             }
-
             label.close_explanation {
                 position: absolute;
                 top: 4px;
@@ -51,7 +51,6 @@
                 cursor: pointer;
                 color: #444444;
             }
-
             input.close_explanation:checked ~ div.explanation {
                 display: none;
             }
@@ -64,7 +63,35 @@
 
         <div class="explanation">
             <label class="close_explanation" for="close_explanation">&nbsp;x&nbsp;</label>
-            Hello, world!
+            This step does not use Javascript at all -
+            it can be seen as preparation for the following.
+            <br><br>
+            The overlay holding the explanation is not part of the excercise;
+            the technique used here is known as 'checkbox hack'.
+            To prevent caching when the page is reloaded,
+            attibute
+            <b><i>autocomplete="off"</i></b>
+            is used outside a
+            <b><i>form</i></b> - tag;
+            this leads (although working) to invalid HTML
+            and will be corrected in one of the next steps.
+            <br>
+            To hide the overlay permanently for own experiments,
+            the <b><i>input</i></b> - tag can be replaced by
+            <br>
+            <tt style="font-size: 0.8em; padding-left: 24px">&lt;input type="checkbox" class="hackbox close_explanation" autocomplete="off" id="close_explanation" checked&gt;</tt>
+            <br><br>
+            The page holds three almost equal
+            <b><i>div</i></b> - tags with a <tt>min-height</tt> of <tt>100%</tt>;
+            to make this having an effect, the parent element also needs a style property <tt>height</tt>
+            (a consequence of prototypal behaviour: when no height is mentioned,
+            obviously a non-zero height will be displayed while the property is still undefined).
+            <br>
+            Property <tt>position</tt> is set to <tt>relative</tt>; that enables inner elements
+            to use the actual <b><i>div</i></b> as anchor.
+            <br>
+            Please notice the inner <b><i>div</i></b> having property <tt>padding-top</tt> at <tt>25%</tt>
+            (not <tt>50%</tt>, what would seem more intuitive).
         </div>
 
         <div class="section" style="">
