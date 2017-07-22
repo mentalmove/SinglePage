@@ -9,6 +9,34 @@
         
         It is an immanent property of this type of application
         that the page holds more content than the window can display at once.
+        For latency reasons, initially invisible parts
+        should not be rendered immediately.
+        <br>
+        To simplify things, content shall be completely generated
+        (not loaded), and the logic when to show it
+        shall be reduced to
+        <i>All content at once after closing the overlay</i>.
+        <br><br>
+        The amount of sections shall be limited by
+        <br>
+        <span style="font-size: 0.8em; padding-left: 24px">Array</span> <tt style="font-size: 0.8em">pages</tt>
+        <br>
+        which also defines the respective sections' content
+        (it will hold the URLs to load later).
+        <br><br>
+        Sections are created using
+        <br>
+        <tt style="font-size: 0.8em; padding-left: 24px">document.createElement("div")</tt>
+        <br>
+        and then appended using the command
+        <br>
+        <tt style="font-size: 0.8em; padding-left: 24px">appendChild()</tt>
+        <br><br>
+        Previously defined CSS classes are used so that only the properties that differ
+        <br>
+        <span style="padding-left: 24px">i.e.</span> <tt style="font-size: 0.8em">backgroundColor</tt> and <tt style="font-size: 0.8em">innerHTML</tt>
+        <br>
+        must be mentioned separately.
         
     </body>
 </html>

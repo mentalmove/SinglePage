@@ -52,10 +52,10 @@
         <script type="text/javascript">
             
             var pages = [ "Part 1", "Part 2", "Part 3" ];
-            
 
             function close_explanation () {
-                document.getElementById("explanation_overlay").parentNode.removeChild(explanation_overlay);
+                var overlay = document.getElementById("explanation_overlay");
+                overlay.parentNode.removeChild(overlay);
                 load_pages();
             }
 
