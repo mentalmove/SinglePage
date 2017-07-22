@@ -51,104 +51,51 @@
 
         <script type="text/javascript">
             
-            /**
-             * Compressable: Will lead to shorter code
-             */
-            function return_element_by_id (id) {
-                return document.getElementById(id);
-            }
-            function return_created_element (element_type) {
-                return document.createElement(element_type);
-            }
+            var pages = [ "Part 1", "Part 2", "Part 3" ];
             
-            /*  */
-            
-            var pages = [ "Page1", "Page2", "Page3", "Page4", "Page5" ];
-            var explanation_overlay;                                            // to be assigned in init()
-            var explanation_content_zone;                                       // to be assigned in init()
-            var fallback;
-            
-            /*  */
 
             function close_explanation () {
-                explanation_overlay.parentNode.removeChild(explanation_overlay);
-                load_pages(0);
+                document.getElementById("explanation_overlay").parentNode.removeChild(explanation_overlay);
+                load_pages();
             }
 
-            function content_loaded (receiveReq, element, callback_function) {
+            function explanation_loaded (receiveReq) {
                 if ( receiveReq.readyState == 4 && (receiveReq.response || receiveReq.responseText) ) {
                     var response = receiveReq.response || receiveReq.responseText;
-                    if ( response.indexOf("<meta") == -1 )
-                        return;
-                    element.innerHTML = response;
-                    callback_function();
+                    document.getElementById("explanation_content").innerHTML = response;
+                    document.getElementById("explanation_overlay").style.display = "block";
                 }
             }
-            function load_content (url, element, callback_function) {
+            function load_explanation () {
                 var receiveReq = new XMLHttpRequest();
                 if ( receiveReq.readyState == 4 || receiveReq.readyState == 0 ) {
-                    receiveReq.open("GET", url, true);
+                    receiveReq.open("GET", "explanation.html", true);
                     receiveReq.onreadystatechange = function () {
-                        content_loaded(receiveReq, element, callback_function);
+                        explanation_loaded(receiveReq);
                     };
                     receiveReq.send(null);
                 }
             }
             
-            function create_section (dark) {
-                var section = return_created_element("div");
-                section.className = "section";
-                if ( dark )
-                    section.style.backgroundColor = "#EAEAEA";
-                var inner = return_created_element("div");
-                inner.className = "inner";
-                section.appendChild(inner);
-                return inner;
-            }
-            
-            function dom_changed (ev) {
-                var section = ev[0].target;
-                section.observer.disconnect();
-                document.body.appendChild(section.parentNode);
-                load_pages(section.index + 1);
-            }
-            function fill_section (element, index) {
-                element.innerHTML = pages[index];
-                element.index = index;
-            }
-            
-            function load_pages (index) {
-                if ( index >= pages.length ) {
-                    var random = Math.floor( Math.random() * 3 );
-                    var additional_content = "<br><br>";
-                    for ( var i = 0; i < 48; i++ ) {
-                        additional_content += ".<br>";
-                    }
-                    additional_content += "<br>...just to make it longer...<br><br>";
-                    document.getElementsByClassName("inner")[random].innerHTML += additional_content;
-                    return;
+            function load_pages () {
+                var section, inner;
+                for ( var i = 0; i < pages.length; i++) {
+                    section = document.createElement("div");
+                    section.className = "section";
+                    if ( i % 2 )
+                        section.style.backgroundColor = "#EAEAEA";
+                    inner = document.createElement("div");
+                    inner.className = "inner";
+                    section.appendChild(inner);
+                    inner.innerHTML = pages[i];
+                    document.body.appendChild(section);
                 }
-                var section_content = create_section(index % 2);
-                section_content.observer = new MutationObserver(dom_changed);
-                section_content.observer.observe( section_content, { childList: true });
-                fill_section(section_content, index);
-            }
-            
-            function on_explanation_loaded () {
-                clearTimeout(fallback);
-                explanation_overlay.style.display = "block";
-            }
-            function init () {
-                explanation_overlay = return_element_by_id("explanation_overlay");
-                explanation_content_zone = return_element_by_id("explanation_content");
-                load_content("explanation.html", explanation_content_zone, on_explanation_loaded);
-                fallback = setTimeout(load_pages, 3001, 0);
             }
 
         </script>
 
     </head>
-    <body onload="init()">
+    <body onload="load_explanation()">
 
         <div class="explanation" id="explanation_overlay">
             <span class="close_explanation" onclick="close_explanation()">&nbsp;x&nbsp;</span>
