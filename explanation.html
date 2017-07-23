@@ -1,38 +1,48 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Explanation for step 6</title>
+        <title>Explanation for step 7</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
         
-        The actual scroll position shall be compared
-        with the section's position; therefore, each
-        section's start position must be known. For
-        suitable valuation of larger zones when scrolling up,
-        the visible window height also should be known.
+        Instead of displaying the the section's position, it is stored
+        as a property of the respective section. This is possible because
+        HTML elements can be seen as normal objects.
         <br><br>
-        <span style="font-size: 0.8em; padding-left: 24px">function</span> <tt style="font-size: 0.8em">get_window_height()</tt>
+        <span style="font-size: 0.8em; padding-left: 24px">function</span> <tt style="font-size: 0.8em">on_scroll()</tt>
         <br>
-        tries to access
-        <br>
-        <tt style="font-size: 0.8em; padding-left: 24px">window.innerHeight</tt> or
-        <tt style="font-size: 0.8em">document.body.clientHeight</tt> or
-        <tt style="font-size: 0.8em">document.documentElement.clientHeight</tt>
-        <br>
-        If none of these succeeds, a temporary <b><i>div</i></b> - tag
-        will be written to the bottom right corner,
-        and the upper distance to the <b><i>body</i></b> - tag
-        will be measured.
+        will be called every time the user scrolls;
+        that is much more information than necessary.
+        Therefore, the function stops if the difference between
+        the actual and the last recognised scroll position
+        is less than <tt style="font-size: 0.8em">THRESHOLD</tt>.
         <br><br>
-        <span style="font-size: 0.8em; padding-left: 24px">function</span> <tt style="font-size: 0.8em">get_position(element)</tt>
+        <span style="font-size: 0.8em; padding-left: 24px">function</span> <tt style="font-size: 0.8em">compare_sections(down)</tt>
         <br>
-        detects an element's upper distance to its parent element,
-        than sums the result to the parent element's upper distance to its parent element
-        and so on until there is no more parent element.
+        iterates through the sections, starting with the latest.
+        Reverse iteration is necessary - when writing
         <br>
-        Result will be an element's absolute position.
+        <tt style="font-size: 0.8em; padding-left: 24px">for ( var i = 0; i < sections.length; i++ )</tt>
+        <br>
+        instead of
+        <br>
+        <tt style="font-size: 0.8em; padding-left: 24px">for ( var i = (sections.length - 1); i >= 0; i-- )</tt>
+        <br>
+        the loop would always stop at the first section.
+        <br><br>
+        Using the same method for scrolling up would not lead to
+        a user friendly result; this can be easily checked by replacing
+        <br>
+        <tt style="font-size: 0.8em; padding-left: 24px">compare_sections( (pageYOffset - scroll_y) > 0 );</tt>
+        <br>
+        with
+        <br>
+        <tt style="font-size: 0.8em; padding-left: 24px">compare_sections( 1 );</tt>
+        <br>
+        for testing purpose - an already reached section would be lost
+        by scrolling only a few pixels upwards.
         
     </body>
 </html>

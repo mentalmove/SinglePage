@@ -32,7 +32,7 @@
                 top: 2%;
                 width: 92%;
                 min-height: 88%;
-                font-size: 2em;
+                font-size: 1.5em;
                 padding: 2%;
                 border-radius: 20px;
                 background-color: #EEEEEE;
@@ -47,14 +47,59 @@
                 cursor: pointer;
                 color: #444444;
             }
+            
+            /*  */
+            #info {
+                position: fixed;
+                top: 9px;
+                right: 16px;
+                z-index: 1;
+            }
         </style>
 
         <script type="text/javascript">
+            
+            function debug (msg) {
+                document.getElementById("info").innerHTML = msg;
+            }
             
             var pages = [ "Part 1", "Part 2", "Part 3", "Part 4", "Part 5" ];
             var explanation_overlay;
             var explanation_content_zone;
             var fallback;
+            
+            /*  */
+            
+            var scroll_y = 0;
+            var stored_index = -1;
+            let THRESHOLD = 32;                                                 // 'var THRESHOLD' for older browsers
+            let SCROLL_DOWN_TOLERANCE = 128;                                    // 'var SCROLL_DOWN_TOLERANCE' for older browsers
+            function compare_sections (down) {
+                if ( down ) {
+                    var sections = document.getElementsByClassName("section");
+                    for ( var i = (sections.length - 1); i >= 0; i-- ) {
+                        if ( (sections[i].y_position - scroll_y) < SCROLL_DOWN_TOLERANCE ) {
+                            if ( i == stored_index )
+                                return;
+                            stored_index = i;
+                            debug( pages[i] + " is visible"  );
+                            return;
+                        }
+                    }
+                }
+                else {
+                    if ( stored_index == -1 )
+                        return;
+                    stored_index = -1;
+                    debug( "<i style='color: gray'>No rule for scroll up defined yet</i>" );
+                }
+            }
+            function on_scroll () {
+                if ( Math.abs(pageYOffset - scroll_y) < THRESHOLD )
+                    return;
+                compare_sections( (pageYOffset - scroll_y) > 0 );
+                scroll_y = pageYOffset;
+            }
             
             /*  */
 
@@ -105,22 +150,6 @@
                 element.index = index;
             }
             
-            function get_window_height () {
-                if ( window.innerHeight )
-                    return window.innerHeight;
-                if ( document.body && document.body.clientHeight )
-                    return document.body.clientHeight;
-                if ( document.documentElement && document.documentElement.clientHeight )
-                    return document.documentElement.clientHeight;
-                var tmp = document.createElement("div");
-                tmp.style.position = "fixed";
-                tmp.style.right = "0px";
-                tmp.style.bottom = "0px";
-                document.body.appendChild(tmp);
-                var y = get_position(tmp);
-                tmp.parentNode.removeChild(tmp);
-                return y;
-            }
             function get_position (element) {
                 var parent_element = element.offsetParent || document.body;
                 var top = element.offsetTop;
@@ -134,29 +163,12 @@
             function load_pages (index) {
                 if ( index >= pages.length ) {
                     var sections = document.getElementsByClassName("section");
-                    var content_zones = document.getElementsByClassName("inner");
-                    var text;
-                    
                     /**
-                     * Window height
+                     * Section position to be stored as a property
                      */
-                    text = "Visible window height is " + get_window_height() + " px";
-                    var window_height_node = document.createTextNode(text);
-                    var window_height_element = document.createElement("span");
-                    window_height_element.style.position = "relative";
-                    window_height_element.style.padding = "4%";
-                    window_height_element.style.top = "4em";
-                    window_height_element.appendChild(window_height_node);
-                    sections[0].insertBefore(window_height_element, content_zones[0]);
-                    
-                    /**
-                     * Individual section position; relative to page
-                     */
-                    for ( var i = 0; i < index; i++ ) {
-                        text = "<br>This section starts at " + get_position(sections[i]) + " px";
-                        content_zones[i].innerHTML += text;
-                    }
-
+                    for ( var i = 0; i < index; i++ )
+                        sections[i].y_position = get_position(sections[i]);
+                    document.body.onscroll = on_scroll;
                     return;
                 }
                 var section_content = create_section(index % 2);
@@ -186,6 +198,8 @@
             <br>
             <span id="explanation_content"></span>
         </div>
+        
+        <div id="info"></div>
 
     </body>
 </html>
