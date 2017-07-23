@@ -22,31 +22,6 @@
                 text-align: center;
                 padding-top: 25%;
             }
-
-            /*  */
-
-            .explanation {
-                display: none;
-                position: absolute;
-                left: 2%;
-                top: 2%;
-                width: 92%;
-                min-height: 88%;
-                font-size: 2em;
-                padding: 2%;
-                border-radius: 20px;
-                background-color: #EEEEEE;
-                opacity: 0.92;
-            }
-            .close_explanation {
-                position: absolute;
-                top: 4px;
-                right: 4px;
-                font-family: Verdana;
-                font-size: 48px;
-                cursor: pointer;
-                color: #444444;
-            }
             
             /*  */
             #info {
@@ -63,11 +38,9 @@
                 document.getElementById("info").innerHTML = msg;
             }
             
-            var pages = [ "Part 1", "Part 2", "Part 3", "Part 4", "Part 5" ];
-            var explanation_overlay;
-            var explanation_content_zone;
-            var fallback;
+            var pages = [ "Page1", "Page2", "InvalidURL", "Page3", "Page4", "Page5" ];
             var window_height = 0;
+            var sections = [];
             
             /*  */
             
@@ -77,7 +50,6 @@
             let SCROLL_DOWN_TOLERANCE = 128;
             let SCROLL_UP_TOLERANCE = 256;
             function compare_sections (down) {
-                var sections = document.getElementsByClassName("section");
                 if ( down ) {
                     for ( var i = (sections.length - 1); i >= 0; i-- ) {
                         if ( (sections[i].y_position - scroll_y) < SCROLL_DOWN_TOLERANCE ) {
@@ -85,8 +57,10 @@
                                 return;
                             if ( i == (sections.length - 1) )
                                 load_pages(sections.length);
-                            stored_index = i;
                             debug( pages[i] + " is visible"  );
+                            if ( stored_index >= 0 )
+                                window.history.pushState("", "Title", pages[i]);
+                            stored_index = i;
                             window_height = get_window_height();
                             return;
                         }
@@ -99,6 +73,7 @@
                     if ( (actual.y_position - scroll_y) > (window_height - SCROLL_UP_TOLERANCE) ) {
                         stored_index--;
                         debug( pages[stored_index] + " is visible"  );
+                        window.history.pushState("", "Title", pages[stored_index]);
                     }
                 }
             }
@@ -109,18 +84,21 @@
                 scroll_y = pageYOffset;
             }
             
-            /*  */
-
-            function close_explanation () {
-                explanation_overlay.parentNode.removeChild(explanation_overlay);
-                load_pages(0);
+            function skip_file (error_message) {
+                if ( sections.length <= pages.length ) {
+                    debug( pages[sections.length] + ": " + error_message + ", will be skipped" );
+                    pages.splice(sections.length, 1);
+                    load_pages(sections.length);
+                }
             }
 
             function content_loaded (receiveReq, element, callback_function) {
                 if ( receiveReq.readyState == 4 && (receiveReq.response || receiveReq.responseText) ) {
                     var response = receiveReq.response || receiveReq.responseText;
-                    if ( response.indexOf("<meta") == -1 )
+                    if ( response.indexOf("<meta") == -1 || (receiveReq.status && receiveReq.status >= 400) ) {
+                        skip_file(receiveReq.statusText);
                         return;
+                    }
                     element.innerHTML = response;
                     callback_function();
                 }
@@ -147,16 +125,11 @@
                 return inner;
             }
             
-            function dom_changed (ev) {
-                var content_zone = ev[0].target;
-                content_zone.observer.disconnect();
-                var section = content_zone.parentNode;
+            function section_added (section) {
+                sections.push(section);
                 document.body.appendChild(section);
                 section.y_position = get_position(section);
                 compare_sections(true);
-            }
-            function fill_section (element, index) {
-                element.innerHTML = pages[index];
             }
             
             function get_window_height () {
@@ -189,20 +162,11 @@
                 if ( index >= pages.length )
                     return;
                 var section_content = create_section(index % 2);
-                section_content.observer = new MutationObserver(dom_changed);
-                section_content.observer.observe( section_content, { childList: true });
-                fill_section(section_content, index);
+                load_content(pages[index] + "/", section_content, function(){section_added(section_content.parentNode)});
             }
             
-            function on_explanation_loaded () {
-                clearTimeout(fallback);
-                explanation_overlay.style.display = "block";
-            }
             function init () {
-                explanation_overlay = document.getElementById("explanation_overlay");
-                explanation_content_zone = document.getElementById("explanation_content");
-                load_content("explanation.html", explanation_content_zone, on_explanation_loaded);
-                fallback = setTimeout(load_pages, 3001, 0);
+                load_pages(0);
                 document.body.onscroll = on_scroll;
             }
 
@@ -210,12 +174,6 @@
 
     </head>
     <body onload="init()">
-
-        <div class="explanation" id="explanation_overlay">
-            <span class="close_explanation" onclick="close_explanation()">&nbsp;x&nbsp;</span>
-            <br>
-            <span id="explanation_content"></span>
-        </div>
         
         <div id="info"></div>
 
