@@ -32,7 +32,7 @@
                 top: 2%;
                 width: 92%;
                 min-height: 88%;
-                font-size: 1.8em;
+                font-size: 2em;
                 padding: 2%;
                 border-radius: 20px;
                 background-color: #EEEEEE;
@@ -59,14 +59,7 @@
 
         <script type="text/javascript">
             
-            var the_time = 0;
             function debug (msg) {
-                var tmp_time = new Date().getTime();
-                if ( (tmp_time - the_time) < 1001 ) {
-                    setTimeout(debug, 101, msg);
-                    return;
-                }
-                the_time = tmp_time;
                 document.getElementById("info").innerHTML = msg;
             }
             
@@ -74,25 +67,18 @@
             var explanation_overlay;
             var explanation_content_zone;
             var fallback;
+            var window_height = 0;
             
             /*  */
-            
-            function normalise_content_zones () {
-                var content_zones = document.getElementsByClassName("inner");
-                for ( var i = 0; i < content_zones.length; i++ ) {
-                    if ( i != stored_index )
-                        content_zones[i].style.fontWeight = "normal";
-                }
-            }
             
             var scroll_y = 0;
             var stored_index = -1;
             let THRESHOLD = 32;
             let SCROLL_DOWN_TOLERANCE = 128;
+            let SCROLL_UP_TOLERANCE = 256;
             function compare_sections (down) {
+                var sections = document.getElementsByClassName("section");
                 if ( down ) {
-                    var sections = document.getElementsByClassName("section");
-                    var content_zones = document.getElementsByClassName("inner");
                     for ( var i = (sections.length - 1); i >= 0; i-- ) {
                         if ( (sections[i].y_position - scroll_y) < SCROLL_DOWN_TOLERANCE ) {
                             if ( i == stored_index )
@@ -100,17 +86,20 @@
                             if ( i == (sections.length - 1) )
                                 load_pages(sections.length);
                             stored_index = i;
-                            normalise_content_zones();
-                            content_zones[i].style.fontWeight = "bold";
+                            debug( pages[i] + " is visible"  );
+                            window_height = get_window_height();
                             return;
                         }
                     }
                 }
                 else {
-                    if ( stored_index == -1 )
+                    if ( stored_index <= 0 || !window_height )
                         return;
-                    normalise_content_zones();
-                    stored_index = -1;
+                    var actual = sections[stored_index];
+                    if ( (actual.y_position - scroll_y) > (window_height - SCROLL_UP_TOLERANCE) ) {
+                        stored_index--;
+                        debug( pages[stored_index] + " is visible"  );
+                    }
                 }
             }
             function on_scroll () {
@@ -164,13 +153,28 @@
                 var section = content_zone.parentNode;
                 document.body.appendChild(section);
                 section.y_position = get_position(section);
-                debug( content_zone.innerHTML + " created at position " + section.y_position );
                 compare_sections(true);
             }
             function fill_section (element, index) {
                 element.innerHTML = pages[index];
             }
             
+            function get_window_height () {
+                if ( window.innerHeight )
+                    return window.innerHeight;
+                if ( document.body && document.body.clientHeight )
+                    return document.body.clientHeight;
+                if ( document.documentElement && document.documentElement.clientHeight )
+                    return document.documentElement.clientHeight;
+                var tmp = document.createElement("div");
+                tmp.style.position = "fixed";
+                tmp.style.right = "0px";
+                tmp.style.bottom = "0px";
+                document.body.appendChild(tmp);
+                var y = get_position(tmp);
+                tmp.parentNode.removeChild(tmp);
+                return y;
+            }
             function get_position (element) {
                 var parent_element = element.offsetParent || document.body;
                 var top = element.offsetTop;

@@ -1,42 +1,35 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Explanation for step 8</title>
+        <title>Explanation for step 9</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
         
-        Now, content shall only be generated on demand.
-        The rule is easy: Whenever the actual visible section
-        is the last one of the page, a new one shall be created.
-        Therefore,
+        Scrolling up leads to the question:
         <br>
-        <tt style="font-size: 0.8em; padding-left: 24px">load_pages(section.index + 1);</tt>
-        <br>
-        from
-        <br>
-        <span style="font-size: 0.8em; padding-left: 24px">function</span> <tt style="font-size: 0.8em">dom_changed()</tt>
-        <br>
-        shall move to
-        <br>
-        <span style="font-size: 0.8em; padding-left: 24px">function</span> <tt style="font-size: 0.8em">compare_sections()</tt>
-        <br>
-        and be written as
-        <br>
-        <tt style="font-size: 0.8em; padding-left: 24px">if ( i == (sections.length - 1) )</tt>     <br>
-        <tt style="font-size: 0.8em; padding-left: 48px">load_pages(sections.length);</tt>
+        <i>Has the section previously recognised as visible gone out of view again?</i>
         <br><br>
-        That makes two changes in <tt style="font-size: 0.8em">dom_changed()</tt> necessary:
+        That shall be translated into
         <br>
-        Firstly, <tt style="font-size: 0.8em">get_position(section);</tt>
-        must be called directly after inserting the section into the DOM
-        (a potential scroll event would need this information).
+        <i>Is the actual section's upper border below a defined limit,
+        measured from the bottom?</i>
+        <br><br>
+        Transformed to code, it results into
+        <pre style="font-size: 0.8em; padding-left: 24px">
+        var actual = sections[stored_index];
+        if ( (actual.y_position - scroll_y) > (window_height - SCROLL_UP_TOLERANCE) )
+            stored_index--;</pre>
         <br>
-        Secondly, <tt style="font-size: 0.8em">compare_sections(true);</tt>
-        must be called here at least when the first section is created -
-        otherwise, without a scroll event, a second section will never be built,
-        and without a second section, a scroll event will never be fired.
+        Now the task is almost completed. In the next step, code generation
+        shall be replaced by loading a page;
+        <br>
+        this page's URL shall be shown
+        in the browser address bar;
+        <br>
+        elements shall be stored to get more
+        flexibility when extending the application.
         
     </body>
 </html>
