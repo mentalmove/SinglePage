@@ -12,181 +12,31 @@
                 height: 100%;
                 overflow: visible;
             }
+            
+            .boring_grey {
+                position: relative;
+                background-color: #C4C4C4;
+                color: #666666;
+                opacity: 0.6;
+                min-height: 100%;
+            }
 
             .section {
                 position: relative;
-                background-color: #F6F6F6;
+                background: -webkit-radial-gradient(#FDFDFC, rgba(224, 224, 224, 0.9), rgba(208, 208, 208, 0.8));
+                background: -o-radial-gradient(#FDFDFC, rgba(224, 224, 224, 0.9), rgba(208, 208, 208, 0.8));
+                background: -moz-radial-gradient(#FDFDFC, rgba(224, 224, 224, 0.9), rgba(208, 208, 208, 0.8));
+                background: radial-gradient(#FDFDFC, rgba(224, 224, 224, 0.9), rgba(208, 208, 208, 0.8));
                 min-height: 100%;
             }
             .inner {
                 text-align: center;
                 padding-top: 25%;
             }
-            
-            /*  */
-            #info {
-                position: fixed;
-                top: 9px;
-                right: 16px;
-                z-index: 1;
-            }
         </style>
-
-        <script type="text/javascript">
-            
-            function debug (msg) {
-                document.getElementById("info").innerHTML = msg;
-            }
-            
-            var pages = [ "Page1", "Page2", "InvalidURL", "Page3", "Page4", "Page5" ];
-            var window_height = 0;
-            var sections = [];
-            
-            /*  */
-            
-            var scroll_y = 0;
-            var stored_index = -1;
-            let THRESHOLD = 32;
-            let SCROLL_DOWN_TOLERANCE = 128;
-            let SCROLL_UP_TOLERANCE = 256;
-            function compare_sections (down) {
-                if ( down ) {
-                    for ( var i = (sections.length - 1); i >= 0; i-- ) {
-                        if ( (sections[i].y_position - scroll_y) < SCROLL_DOWN_TOLERANCE ) {
-                            if ( i == stored_index )
-                                return;
-                            if ( i == (sections.length - 1) )
-                                load_pages(sections.length);
-                            debug( pages[i] + " is visible"  );
-                            if ( stored_index >= 0 )
-                                window.history.pushState("", "Title", pages[i]);
-                            stored_index = i;
-                            window_height = get_window_height();
-                            return;
-                        }
-                    }
-                }
-                else {
-                    if ( stored_index <= 0 || !window_height )
-                        return;
-                    var actual = sections[stored_index];
-                    if ( (actual.y_position - scroll_y) > (window_height - SCROLL_UP_TOLERANCE) ) {
-                        stored_index--;
-                        debug( pages[stored_index] + " is visible"  );
-                        window.history.pushState("", "Title", pages[stored_index]);
-                    }
-                }
-            }
-            function on_scroll () {
-                if ( Math.abs(pageYOffset - scroll_y) < THRESHOLD )
-                    return;
-                compare_sections( (pageYOffset - scroll_y) > 0 );
-                scroll_y = pageYOffset;
-            }
-            
-            function check_section_data () {
-                var y;
-		for ( var i = sections.length - 1; i >= 0; i-- ) {
-                    y = get_position(sections[i]);
-                    if ( y == sections[i].y_position )
-                        return;	
-                    sections[i].y_position = y;
-                }
-            }
-            
-            function skip_file (error_message) {
-                if ( sections.length <= pages.length ) {
-                    debug( pages[sections.length] + ": " + error_message + ", will be skipped" );
-                    pages.splice(sections.length, 1);
-                    load_pages(sections.length);
-                }
-            }
-
-            function content_loaded (receiveReq, element, callback_function) {
-                if ( receiveReq.readyState == 4 && (receiveReq.response || receiveReq.responseText) ) {
-                    var response = receiveReq.response || receiveReq.responseText;
-                    if ( response.indexOf("<meta") == -1 || (receiveReq.status && receiveReq.status >= 400) ) {
-                        skip_file(receiveReq.statusText);
-                        return;
-                    }
-                    element.innerHTML = response;
-                    callback_function();
-                }
-            }
-            function load_content (url, element, callback_function) {
-                var receiveReq = new XMLHttpRequest();
-                if ( receiveReq.readyState == 4 || receiveReq.readyState == 0 ) {
-                    receiveReq.open("GET", url, true);
-                    receiveReq.onreadystatechange = function () {
-                        content_loaded(receiveReq, element, callback_function);
-                    };
-                    receiveReq.send(null);
-                }
-            }
-            
-            function create_section (dark) {
-                var section = document.createElement("div");
-                section.className = "section";
-                if ( dark )
-                    section.style.backgroundColor = "#EAEAEA";
-                var inner = document.createElement("div");
-                inner.className = "inner";
-                section.appendChild(inner);
-                return inner;
-            }
-            
-            function section_added (section) {
-                sections.push(section);
-                document.body.appendChild(section);
-                section.y_position = get_position(section);
-                compare_sections(true);
-            }
-            
-            function get_window_height () {
-                if ( window.innerHeight )
-                    return window.innerHeight;
-                if ( document.body && document.body.clientHeight )
-                    return document.body.clientHeight;
-                if ( document.documentElement && document.documentElement.clientHeight )
-                    return document.documentElement.clientHeight;
-                var tmp = document.createElement("div");
-                tmp.style.position = "fixed";
-                tmp.style.right = "0px";
-                tmp.style.bottom = "0px";
-                document.body.appendChild(tmp);
-                var y = get_position(tmp);
-                tmp.parentNode.removeChild(tmp);
-                return y;
-            }
-            function get_position (element) {
-                var parent_element = element.offsetParent || document.body;
-                var top = element.offsetTop;
-                while ( parent_element ) {
-                    top += parent_element.offsetTop;
-                    parent_element = parent_element.offsetParent;
-                }
-                return top;
-            }
-            
-            function load_pages (index) {
-                if ( index >= pages.length )
-                    return;
-                var section_content = create_section(index % 2);
-                load_content(pages[index] + "/", section_content, function(){section_added(section_content.parentNode)});
-            }
-            
-            function init () {
-                load_pages(0);
-                document.body.onscroll = on_scroll;
-                setInterval(check_section_data, 3456);
-            }
-
-        </script>
+        
+        <script type="text/javascript" src="code_min.js"></script>
 
     </head>
-    <body onload="init()">
-        
-        <div id="info"></div>
-
-    </body>
+    <body onload="init('Page1', 'Page2', 'Page3', 'Page4', 'Page5')"></body>
 </html>
