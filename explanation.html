@@ -1,13 +1,54 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Explanation for step 3</title>
+        <title>Explanation for step 5</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
         
-        Hello!
+        Some changes, enabling the application to react on problems
+        potentially occuring in real life.
+        <br><br>
+        The page is no longer dependent of successfully loading
+        the explanation:
+        <br>
+        <tt style="font-size: 0.8em; padding-left: 24px">fallback = setTimeout(load_pages, 3001, 0);</tt>
+        <br>
+        invokes content generation even if loading the explanation fails;
+        if it succeeds during 3 seconds,
+        <br>
+        <tt style="font-size: 0.8em; padding-left: 24px">clearTimeout(fallback);</tt>
+        <br>
+        will delete the timeout.
+        <br><br>
+        AJAX will be handled more generic:
+        <br>
+        <span style="font-size: 0.8em; padding-left: 24px">function</span> <tt style="font-size: 0.8em">load_content(url, element, callback_function)</tt>
+        <br>
+        will treat internet address [<i>url</i>], explanation content zone [<i>element</i>] and success action [<i>callback_function</i>]
+        as parameters to make it reusable for potential other AJAX calls.
+        <br>
+        Loading will only be seen as successful if <b><i>meta</i></b> - tags
+        can be found (displaying <b>404</b> messages usually is unwanted).
+        <br><br>
+        Content generation is only a simulation of content loading,
+        and content loading can fail.
+        Therefore, every section to fill is observed by
+        <br>
+        <tt style="font-size: 0.8em; padding-left: 24px">section_content.observer = new MutationObserver(dom_changed);</tt>
+        <br>
+        As long as no change is detected, the next section's generation will not be invoked.
+        <br>
+        This can be checked easily by changing the <tt style="font-size: 0.8em">pages</tt> - Array to
+        <br>
+        <tt style="font-size: 0.8em; padding-left: 24px">var pages = [ "Part 1", "", "Part 3", "Part 4", "Part 5" ];</tt>
+        <br>
+        for testing purpose.
+        <br><br>
+        Finally, one of the first three sections
+        will be expanded with dummy content
+        to demonstrate the following sections will move.
         
     </body>
 </html>

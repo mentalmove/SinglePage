@@ -32,7 +32,7 @@
                 top: 2%;
                 width: 92%;
                 min-height: 88%;
-                font-size: 2em;
+                font-size: 1.5em;
                 padding: 2%;
                 border-radius: 20px;
                 background-color: #EEEEEE;
@@ -51,19 +51,7 @@
 
         <script type="text/javascript">
             
-            /**
-             * Compressable: Will lead to shorter code
-             */
-            function return_element_by_id (id) {
-                return document.getElementById(id);
-            }
-            function return_created_element (element_type) {
-                return document.createElement(element_type);
-            }
-            
-            /*  */
-            
-            var pages = [ "Page1", "Page2", "Page3", "Page4", "Page5" ];
+            var pages = [ "Part 1", "Part 2", "Part 3", "Part 4", "Part 5" ];
             var explanation_overlay;                                            // to be assigned in init()
             var explanation_content_zone;                                       // to be assigned in init()
             var fallback;
@@ -96,11 +84,11 @@
             }
             
             function create_section (dark) {
-                var section = return_created_element("div");
+                var section = document.createElement("div");
                 section.className = "section";
                 if ( dark )
                     section.style.backgroundColor = "#EAEAEA";
-                var inner = return_created_element("div");
+                var inner = document.createElement("div");
                 inner.className = "inner";
                 section.appendChild(inner);
                 return inner;
@@ -139,8 +127,8 @@
                 explanation_overlay.style.display = "block";
             }
             function init () {
-                explanation_overlay = return_element_by_id("explanation_overlay");
-                explanation_content_zone = return_element_by_id("explanation_content");
+                explanation_overlay = document.getElementById("explanation_overlay");
+                explanation_content_zone = document.getElementById("explanation_content");
                 load_content("explanation.html", explanation_content_zone, on_explanation_loaded);
                 fallback = setTimeout(load_pages, 3001, 0);
             }

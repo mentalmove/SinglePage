@@ -12,7 +12,6 @@
                 height: 100%;
                 overflow: visible;
             }
-
             .section {
                 position: relative;
                 background-color: #F6F6F6;
@@ -22,9 +21,7 @@
                 text-align: center;
                 padding-top: 25%;
             }
-
             /*  */
-
             .explanation {
                 display: none;
                 position: absolute;
@@ -50,16 +47,18 @@
         </style>
 
         <script type="text/javascript">
-
-            function close_explanation (pseudo_button) {
-                pseudo_button.parentNode.style.display = "none";
+            
+            var pages = [ "Part 1", "Part 2", "Part 3" ];
+            function close_explanation () {
+                var overlay = document.getElementById("explanation_overlay");
+                overlay.parentNode.removeChild(overlay);
+                load_pages();
             }
-
             function explanation_loaded (receiveReq) {
                 if ( receiveReq.readyState == 4 && (receiveReq.response || receiveReq.responseText) ) {
                     var response = receiveReq.response || receiveReq.responseText;
                     document.getElementById("explanation_content").innerHTML = response;
-                    document.getElementsByClassName("explanation")[0].style.display = "block";
+                    document.getElementById("explanation_overlay").style.display = "block";
                 }
             }
             function load_explanation () {
@@ -72,32 +71,28 @@
                     receiveReq.send(null);
                 }
             }
-
+            
+            function load_pages () {
+                var section, inner;
+                for ( var i = 0; i < pages.length; i++) {
+                    section = document.createElement("div");
+                    section.className = "section";
+                    if ( i % 2 )
+                        section.style.backgroundColor = "#EAEAEA";
+                    inner = document.createElement("div");
+                    inner.className = "inner";
+                    section.appendChild(inner);
+                    inner.innerHTML = pages[i];
+                    document.body.appendChild(section);
+                }
+            }
         </script>
 
     </head>
     <body onload="load_explanation()">
 
-        <div class="section" style="">
-            <div class="inner">
-                Part 1
-            </div>
-        </div>
-
-        <div class="section" style="background-color: #EAEAEA">
-            <div class="inner">
-                Part 2
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="inner">
-                Part 3
-            </div>
-        </div>
-
-        <div class="explanation">
-            <span class="close_explanation" onclick="close_explanation(this)">&nbsp;x&nbsp;</span>
+        <div class="explanation" id="explanation_overlay">
+            <span class="close_explanation" onclick="close_explanation()">&nbsp;x&nbsp;</span>
             <br>
             <span id="explanation_content"></span>
         </div>
