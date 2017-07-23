@@ -1,48 +1,42 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Explanation for step 7</title>
+        <title>Explanation for step 8</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
         
-        Instead of displaying the the section's position, it is stored
-        as a property of the respective section. This is possible because
-        HTML elements can be seen as normal objects.
+        Now, content shall only be generated on demand.
+        The rule is easy: Whenever the actual visible section
+        is the last one of the page, a new one shall be created.
+        Therefore,
+        <br>
+        <tt style="font-size: 0.8em; padding-left: 24px">load_pages(section.index + 1);</tt>
+        <br>
+        from
+        <br>
+        <span style="font-size: 0.8em; padding-left: 24px">function</span> <tt style="font-size: 0.8em">dom_changed()</tt>
+        <br>
+        shall move to
+        <br>
+        <span style="font-size: 0.8em; padding-left: 24px">function</span> <tt style="font-size: 0.8em">compare_sections()</tt>
+        <br>
+        and be written as
+        <br>
+        <tt style="font-size: 0.8em; padding-left: 24px">if ( i == (sections.length - 1) )</tt>     <br>
+        <tt style="font-size: 0.8em; padding-left: 48px">load_pages(sections.length);</tt>
         <br><br>
-        <span style="font-size: 0.8em; padding-left: 24px">function</span> <tt style="font-size: 0.8em">on_scroll()</tt>
+        That makes two changes in <tt style="font-size: 0.8em">dom_changed()</tt> necessary:
         <br>
-        will be called every time the user scrolls;
-        that is much more information than necessary.
-        Therefore, the function stops if the difference between
-        the actual and the last recognised scroll position
-        is less than <tt style="font-size: 0.8em">THRESHOLD</tt>.
-        <br><br>
-        <span style="font-size: 0.8em; padding-left: 24px">function</span> <tt style="font-size: 0.8em">compare_sections(down)</tt>
+        Firstly, <tt style="font-size: 0.8em">get_position(section);</tt>
+        must be called directly after inserting the section into the DOM
+        (a potential scroll event would need this information).
         <br>
-        iterates through the sections, starting with the latest.
-        Reverse iteration is necessary - when writing
-        <br>
-        <tt style="font-size: 0.8em; padding-left: 24px">for ( var i = 0; i < sections.length; i++ )</tt>
-        <br>
-        instead of
-        <br>
-        <tt style="font-size: 0.8em; padding-left: 24px">for ( var i = (sections.length - 1); i >= 0; i-- )</tt>
-        <br>
-        the loop would always stop at the first section.
-        <br><br>
-        Using the same method for scrolling up would not lead to
-        a user friendly result; this can be easily checked by replacing
-        <br>
-        <tt style="font-size: 0.8em; padding-left: 24px">compare_sections( (pageYOffset - scroll_y) > 0 );</tt>
-        <br>
-        with
-        <br>
-        <tt style="font-size: 0.8em; padding-left: 24px">compare_sections( 1 );</tt>
-        <br>
-        for testing purpose - an already reached section would be lost
-        by scrolling only a few pixels upwards.
+        Secondly, <tt style="font-size: 0.8em">compare_sections(true);</tt>
+        must be called here at least when the first section is created -
+        otherwise, without a scroll event, a second section will never be built,
+        and without a second section, a scroll event will never be fired.
         
     </body>
 </html>

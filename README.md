@@ -2,5 +2,5 @@
 
 ## The branches from Step1 to master can be seen as tutorial
 
-Step 7 -
-Regarding scroll down
+Step 8 -
+Generating content only when needed

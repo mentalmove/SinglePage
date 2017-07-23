@@ -32,7 +32,7 @@
                 top: 2%;
                 width: 92%;
                 min-height: 88%;
-                font-size: 1.5em;
+                font-size: 1.8em;
                 padding: 2%;
                 border-radius: 20px;
                 background-color: #EEEEEE;
@@ -59,7 +59,14 @@
 
         <script type="text/javascript">
             
+            var the_time = 0;
             function debug (msg) {
+                var tmp_time = new Date().getTime();
+                if ( (tmp_time - the_time) < 1001 ) {
+                    setTimeout(debug, 101, msg);
+                    return;
+                }
+                the_time = tmp_time;
                 document.getElementById("info").innerHTML = msg;
             }
             
@@ -70,19 +77,31 @@
             
             /*  */
             
+            function normalise_content_zones () {
+                var content_zones = document.getElementsByClassName("inner");
+                for ( var i = 0; i < content_zones.length; i++ ) {
+                    if ( i != stored_index )
+                        content_zones[i].style.fontWeight = "normal";
+                }
+            }
+            
             var scroll_y = 0;
             var stored_index = -1;
-            let THRESHOLD = 32;                                                 // 'var THRESHOLD' for older browsers
-            let SCROLL_DOWN_TOLERANCE = 128;                                    // 'var SCROLL_DOWN_TOLERANCE' for older browsers
+            let THRESHOLD = 32;
+            let SCROLL_DOWN_TOLERANCE = 128;
             function compare_sections (down) {
                 if ( down ) {
                     var sections = document.getElementsByClassName("section");
+                    var content_zones = document.getElementsByClassName("inner");
                     for ( var i = (sections.length - 1); i >= 0; i-- ) {
                         if ( (sections[i].y_position - scroll_y) < SCROLL_DOWN_TOLERANCE ) {
                             if ( i == stored_index )
                                 return;
+                            if ( i == (sections.length - 1) )
+                                load_pages(sections.length);
                             stored_index = i;
-                            debug( pages[i] + " is visible"  );
+                            normalise_content_zones();
+                            content_zones[i].style.fontWeight = "bold";
                             return;
                         }
                     }
@@ -91,7 +110,6 @@
                     if ( stored_index == -1 )
                         return;
                     stored_index = -1;
-                    debug( "<i style='color: gray'>No rule for scroll up defined yet</i>" );
                 }
             }
             function on_scroll () {
@@ -140,14 +158,16 @@
             }
             
             function dom_changed (ev) {
-                var section = ev[0].target;
-                section.observer.disconnect();
-                document.body.appendChild(section.parentNode);
-                load_pages(section.index + 1);
+                var content_zone = ev[0].target;
+                content_zone.observer.disconnect();
+                var section = content_zone.parentNode;
+                document.body.appendChild(section);
+                section.y_position = get_position(section);
+                debug( content_zone.innerHTML + " created at position " + section.y_position );
+                compare_sections(true);
             }
             function fill_section (element, index) {
                 element.innerHTML = pages[index];
-                element.index = index;
             }
             
             function get_position (element) {
@@ -161,16 +181,8 @@
             }
             
             function load_pages (index) {
-                if ( index >= pages.length ) {
-                    var sections = document.getElementsByClassName("section");
-                    /**
-                     * Section position to be stored as a property
-                     */
-                    for ( var i = 0; i < index; i++ )
-                        sections[i].y_position = get_position(sections[i]);
-                    document.body.onscroll = on_scroll;
+                if ( index >= pages.length )
                     return;
-                }
                 var section_content = create_section(index % 2);
                 section_content.observer = new MutationObserver(dom_changed);
                 section_content.observer.observe( section_content, { childList: true });
@@ -186,6 +198,7 @@
                 explanation_content_zone = document.getElementById("explanation_content");
                 load_content("explanation.html", explanation_content_zone, on_explanation_loaded);
                 fallback = setTimeout(load_pages, 3001, 0);
+                document.body.onscroll = on_scroll;
             }
 
         </script>
