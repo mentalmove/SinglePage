@@ -32,7 +32,7 @@
                 top: 2%;
                 width: 92%;
                 min-height: 88%;
-                font-size: 1.5em;
+                font-size: 2em;
                 padding: 2%;
                 border-radius: 20px;
                 background-color: #EEEEEE;
@@ -105,15 +105,58 @@
                 element.index = index;
             }
             
+            function get_window_height () {
+                if ( window.innerHeight )
+                    return window.innerHeight;
+                if ( document.body && document.body.clientHeight )
+                    return document.body.clientHeight;
+                if ( document.documentElement && document.documentElement.clientHeight )
+                    return document.documentElement.clientHeight;
+                var tmp = document.createElement("div");
+                tmp.style.position = "fixed";
+                tmp.style.right = "0px";
+                tmp.style.bottom = "0px";
+                document.body.appendChild(tmp);
+                var y = get_position(tmp);
+                tmp.parentNode.removeChild(tmp);
+                return y;
+            }
+            function get_position (element) {
+                var parent_element = element.offsetParent || document.body;
+                var top = element.offsetTop;
+                while ( parent_element ) {
+                    top += parent_element.offsetTop;
+                    parent_element = parent_element.offsetParent;
+                }
+                return top;
+            }
+            
             function load_pages (index) {
                 if ( index >= pages.length ) {
-                    var random = Math.floor( Math.random() * 3 );
-                    var additional_content = "<br><br>";
-                    for ( var i = 0; i < 48; i++ ) {
-                        additional_content += ".<br>";
+                    var sections = document.getElementsByClassName("section");
+                    var content_zones = document.getElementsByClassName("inner");
+                    var text;
+                    
+                    /**
+                     * Window height
+                     */
+                    text = "Visible window height is " + get_window_height() + " px";
+                    var window_height_node = document.createTextNode(text);
+                    var window_height_element = document.createElement("span");
+                    window_height_element.style.position = "relative";
+                    window_height_element.style.padding = "4%";
+                    window_height_element.style.top = "4em";
+                    window_height_element.appendChild(window_height_node);
+                    sections[0].insertBefore(window_height_element, content_zones[0]);
+                    
+                    /**
+                     * Individual section position; relative to page
+                     */
+                    for ( var i = 0; i < index; i++ ) {
+                        text = "<br>This section starts at " + get_position(sections[i]) + " px";
+                        content_zones[i].innerHTML += text;
                     }
-                    additional_content += "<br>...just to make it longer...<br><br>";
-                    document.getElementsByClassName("inner")[random].innerHTML += additional_content;
+
                     return;
                 }
                 var section_content = create_section(index % 2);

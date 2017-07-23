@@ -1,54 +1,38 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Explanation for step 5</title>
+        <title>Explanation for step 6</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
         
-        Some changes, enabling the application to react on problems
-        potentially occuring in real life.
+        The actual scroll position shall be compared
+        with the section's position; therefore, each
+        section's start position must be known. For
+        suitable valuation of larger zones when scrolling up,
+        the visible window height also should be known.
         <br><br>
-        The page is no longer dependent of successfully loading
-        the explanation:
+        <span style="font-size: 0.8em; padding-left: 24px">function</span> <tt style="font-size: 0.8em">get_window_height()</tt>
         <br>
-        <tt style="font-size: 0.8em; padding-left: 24px">fallback = setTimeout(load_pages, 3001, 0);</tt>
+        tries to access
         <br>
-        invokes content generation even if loading the explanation fails;
-        if it succeeds during 3 seconds,
+        <tt style="font-size: 0.8em; padding-left: 24px">window.innerHeight</tt> or
+        <tt style="font-size: 0.8em">document.body.clientHeight</tt> or
+        <tt style="font-size: 0.8em">document.documentElement.clientHeight</tt>
         <br>
-        <tt style="font-size: 0.8em; padding-left: 24px">clearTimeout(fallback);</tt>
-        <br>
-        will delete the timeout.
+        If none of these succeeds, a temporary <b><i>div</i></b> - tag
+        will be written to the bottom right corner,
+        and the upper distance to the <b><i>body</i></b> - tag
+        will be measured.
         <br><br>
-        AJAX will be handled more generic:
+        <span style="font-size: 0.8em; padding-left: 24px">function</span> <tt style="font-size: 0.8em">get_position(element)</tt>
         <br>
-        <span style="font-size: 0.8em; padding-left: 24px">function</span> <tt style="font-size: 0.8em">load_content(url, element, callback_function)</tt>
+        detects an element's upper distance to its parent element,
+        than sums the result to the parent element's upper distance to its parent element
+        and so on until there is no more parent element.
         <br>
-        will treat internet address [<i>url</i>], explanation content zone [<i>element</i>] and success action [<i>callback_function</i>]
-        as parameters to make it reusable for potential other AJAX calls.
-        <br>
-        Loading will only be seen as successful if <b><i>meta</i></b> - tags
-        can be found (displaying <b>404</b> messages usually is unwanted).
-        <br><br>
-        Content generation is only a simulation of content loading,
-        and content loading can fail.
-        Therefore, every section to fill is observed by
-        <br>
-        <tt style="font-size: 0.8em; padding-left: 24px">section_content.observer = new MutationObserver(dom_changed);</tt>
-        <br>
-        As long as no change is detected, the next section's generation will not be invoked.
-        <br>
-        This can be checked easily by changing the <tt style="font-size: 0.8em">pages</tt> - Array to
-        <br>
-        <tt style="font-size: 0.8em; padding-left: 24px">var pages = [ "Part 1", "", "Part 3", "Part 4", "Part 5" ];</tt>
-        <br>
-        for testing purpose.
-        <br><br>
-        Finally, one of the first three sections
-        will be expanded with dummy content
-        to demonstrate the following sections will move.
+        Result will be an element's absolute position.
         
     </body>
 </html>
