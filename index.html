@@ -84,6 +84,16 @@
                 scroll_y = pageYOffset;
             }
             
+            function check_section_data () {
+                var y;
+		for ( var i = sections.length - 1; i >= 0; i-- ) {
+                    y = get_position(sections[i]);
+                    if ( y == sections[i].y_position )
+                        return;	
+                    sections[i].y_position = y;
+                }
+            }
+            
             function skip_file (error_message) {
                 if ( sections.length <= pages.length ) {
                     debug( pages[sections.length] + ": " + error_message + ", will be skipped" );
@@ -168,6 +178,7 @@
             function init () {
                 load_pages(0);
                 document.body.onscroll = on_scroll;
+                setInterval(check_section_data, 3456);
             }
 
         </script>
