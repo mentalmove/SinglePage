@@ -2,5 +2,5 @@
 
 ## The branches from Step1 to master can be seen as tutorial.
 
-## Step 1
+Step 1
 Simulation of the page's appearance without any Javascript
