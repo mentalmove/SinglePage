@@ -27,7 +27,7 @@
                         load_pages(sections.length);
                     highlight(i);
                     if ( stored_index >= 0 )
-                        win_dow.history.pushState("", "Title", pages[i]);
+;//win_dow.history.pushState("", "Title", pages[i]);
                     stored_index = i;
                     window_height = get_window_height();
                     return;
@@ -41,7 +41,7 @@
             if ( (actual.yy - scroll_y) > (window_height - SCROLL_UP_TOLERANCE) ) {
                 stored_index--;
                 highlight(stored_index);
-                win_dow.history.pushState("", "Title", pages[stored_index]);
+//win_dow.history.pushState("", "Title", pages[stored_index]);
             }
         }
     }
@@ -91,10 +91,31 @@
             receiveReq.send(null);
         }
     }
+    
+    var branches_base = "https://github.com/mentalmove/SinglePage/tree/";
+    var branches = {
+        "step1": "Step1-WithoutJavascript"
+    };
+    function create_header (section, index) {
+        if ( index >= pages.length )
+            return;
+        var branch_index = pages[index].replace(/\.html/, "");
+        if ( !branch_index || !branches[branch_index] )
+            return;
+        var title_link = document.createElement("header");
+        title_link.style.marginTop = "5px";
+        var a = document.createElement("a");
+        a.innerHTML = "<br>View Branch on GitHub";
+        a.href = branches_base + branches[branch_index];
+        title_link.appendChild(a);
+        section.appendChild(title_link);
+console.log( branches_base + branches[branch_index] );
+    }
 
-    function create_section () {
+    function create_section (index) {
         var section = docu_ment.createElement("div");
         section.className = boring_grey;
+        create_header(section, index);
         var inner = docu_ment.createElement("div");
         inner[class_name] = "inner";
         section.appendChild(inner);
@@ -137,7 +158,7 @@
     function load_pages (index) {
         if ( index >= pages.length )
             return;
-        var section_content = create_section();
+        var section_content = create_section(index);
         load_content(pages[index], section_content, function(){section_added(section_content.parentNode)});
     }
     
@@ -164,5 +185,5 @@
   );
   
 function demonstrate () {
-    init("index", "step1");
+    init("index", "step1"/*, "step2"*/);
 }

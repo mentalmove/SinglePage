@@ -8,30 +8,70 @@
         <style type="text/css">
             html, body {
                 margin: 0px;
-                font-family: Arial, Verdana;
+                padding-top: 28px;
+                font-family: "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+                color: #727272;
                 height: 100%;
                 overflow: visible;
             }
             
             .boring_grey {
                 position: relative;
-                background-color: #C4C4C4;
-                color: #666666;
+                color: #888888;
                 opacity: 0.6;
                 min-height: 100%;
+                width: 84%;
+                margin: 0 auto;
             }
 
             .section {
                 position: relative;
-                background: -webkit-radial-gradient(#FDFDFC, rgba(224, 224, 224, 0.9), rgba(208, 208, 208, 0.8));
-                background: -o-radial-gradient(#FDFDFC, rgba(224, 224, 224, 0.9), rgba(208, 208, 208, 0.8));
-                background: -moz-radial-gradient(#FDFDFC, rgba(224, 224, 224, 0.9), rgba(208, 208, 208, 0.8));
-                background: radial-gradient(#FDFDFC, rgba(224, 224, 224, 0.9), rgba(208, 208, 208, 0.8));
                 min-height: 100%;
+                width: 84%;
+                margin: 0 auto;
+                
+                border: thin solid red;
             }
             .inner {
-                text-align: center;
-                padding-top: 25%;
+                text-align: left;
+                padding-top: 2%;
+                
+                border: thin solid green;
+            }
+            
+            header, footer {
+                width: 270px;
+                float: right;
+                
+                /*  background-color: pink; */
+            }
+            footer {
+                position: absolute;
+                right: 8%;
+                bottom: 0%;
+                z-index: 1;
+            }
+            h1 {
+                font-size: 28px;
+            }
+            h1, h2, h3 {
+                line-height: 1.1;
+            }
+            h1, h2, h3, h4, h5, h6 {
+                color: #222;
+                margin: 0 0 20px;
+            }
+            p, ul, ol, table, pre, dl {
+                margin: 0 0 20px;
+            }
+
+            a {
+                color:#267CB9;
+                text-decoration:none;
+            }
+            a:hover, a:focus {
+                color:#069;
+                font-weight:bold;
             }
         </style>
         
@@ -41,10 +81,43 @@
     <body onload="demonstrate()">
         
         <div class="section">
+            <header>
+                <h1>
+                    Single Page
+                </h1>
+                <p></p>
+                <p class="view">
+                    <a href="https://github.com/mentalmove/SinglePage">
+                        View the Project on GitHub <small></small>
+                    </a>
+                </p>
+            </header>
+            <br><br><br><br>
             <div class="inner">
-                Basic
+                <h1>
+                    Single Page
+                </h1>
+                <br><br>
+                <h2>
+                    A single page web application, loading content dynamically on scroll and changing the web site's URL
+                </h2>
+                <br>
+                <p>
+                    The branches from <i>Step1</i> to <i>master</i> can be seen as tutorial
+                </p>
             </div>
+            
         </div>
+        
+        <footer>
+            <p>
+                This project is maintained by
+                <a href="https://github.com/mentalmove?tab=repositories">
+                    mentalmove
+                </a>
+            </p>
+            <p><small><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist" style="font-size:11px">orderedlist</a></small></small></p>
+        </footer>
         
     </body>
 </html>
