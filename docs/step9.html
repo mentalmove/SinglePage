@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Step 9</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        
+        <h2>
+            Step 9 - Scroll Up
+        </h2>
+        
+        <br><br>
+        
+        <h3>
+            Regarding scroll up
+        </h3>
+        
+        <br><br>
+        
+        Scrolling up leads to the question:
+        <br>
+        <i>Has the section previously recognised as visible gone out of view again?</i>
+        <br><br>
+        That shall be translated into
+        <br>
+        <i>Is the actual section's upper border below a defined limit,
+        measured from the bottom?</i>
+        <br><br>
+        Transformed to code, it results into
+        <pre>var actual = sections[stored_index];
+if ( (actual.y_position - scroll_y) > (window_height - SCROLL_UP_TOLERANCE) )
+    stored_index--;</pre>
+        <br>
+        Now the task is almost completed. In the next step, code generation
+        shall be replaced by loading a page;
+        <br>
+        this page's URL shall be shown
+        in the browser address bar;
+        <br>
+        elements shall be stored to get more
+        flexibility when extending the application.
+        
+        <br><br><br><br>
+        
+        <h2>
+            <a href="https://github.com/mentalmove/SinglePage/tree/Step10(development)">
+                Step 10 - Fine tuning
+            </a>
+        </h2>
+        <br>
+        <h2>
+            <a href="https://github.com/mentalmove/SinglePage/tree/master">
+                Branch <i>master</i>
+            </a>
+        </h2>
+        
+        <br><br>
+        
+    </body>
+</html>

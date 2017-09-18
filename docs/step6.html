@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Step 6</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        
+        <h2>
+            Step 6 - Element Positions
+        </h2>
+        
+        <br><br>
+        
+        <h3>
+            Detecting page properties
+        </h3>
+        
+        <br><br>
+        
+        The actual scroll position shall be compared
+        with the section's position; therefore, each
+        section's start position must be known.
+        <br>
+        For suitable valuation of larger zones when scrolling up,
+        the visible window height also should be known.
+        <br><br>
+        <pre>get_window_height()</pre>
+        tries to access one of the following:
+        <pre>window.innerHeight
+document.body.clientHeight
+document.documentElement.clientHeight</pre>
+        <br>
+        If none of these succeeds, a temporary <b><i>div</i></b> - tag
+        will be written to the bottom right corner,
+        and the upper distance to the <b><i>body</i></b> - tag
+        will be measured.
+        <br><br>
+        <pre>get_position(element)</pre>
+        detects an element's upper distance to its parent element,
+        than sums the result to the parent element's upper distance to its parent element
+        and so on until there is no more parent element.
+        <br>
+        Result will be an element's absolute position.
+        
+    </body>
+</html>

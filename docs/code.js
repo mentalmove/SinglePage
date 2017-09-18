@@ -27,7 +27,7 @@
                         load_pages(sections.length);
                     highlight(i);
                     if ( stored_index >= 0 )
-win_dow.history.pushState("", "Title", pages[i]);
+                        win_dow.history.pushState("", "Title", pages[i]);
                     stored_index = i;
                     window_height = get_window_height();
                     return;
@@ -41,7 +41,7 @@ win_dow.history.pushState("", "Title", pages[i]);
             if ( (actual.yy - scroll_y) > (window_height - SCROLL_UP_TOLERANCE) ) {
                 stored_index--;
                 highlight(stored_index);
-win_dow.history.pushState("", "Title", pages[stored_index]);
+                win_dow.history.pushState("", "Title", pages[stored_index]);
             }
         }
     }
@@ -94,7 +94,15 @@ win_dow.history.pushState("", "Title", pages[stored_index]);
     
     var branches_base = "https://github.com/mentalmove/SinglePage/tree/";
     var branches = {
-        "step1": "Step1-WithoutJavascript"
+        "step1": "Step1-WithoutJavascript",
+        "step2": "Step2-ValidHTML",
+        "step3": "Step3-IntroducingAJAX",
+        "step4": "Step4-GeneratedContent",
+        "step5": "Step5-EventControl",
+        "step6": "Step6-ElementPositions",
+        "step7": "Step7-ScrollDownPartI",
+        "step8": "Step8-ScrollDownPartII",
+        "step9": "Step9-ScrollUp"
     };
     function create_header (section, index) {
         if ( index >= pages.length )
@@ -109,7 +117,6 @@ win_dow.history.pushState("", "Title", pages[stored_index]);
         a.href = branches_base + branches[branch_index];
         title_link.appendChild(a);
         section.appendChild(title_link);
-//console.log( branches_base + branches[branch_index] );
     }
 
     function create_section (index) {
@@ -184,5 +191,5 @@ win_dow.history.pushState("", "Title", pages[stored_index]);
   );
   
 function demonstrate () {
-    init("index", "step1");
+    init("index", "step1", "step2", "step3", "step4", "step5", "step6", "step7", "step8", "step9");
 }

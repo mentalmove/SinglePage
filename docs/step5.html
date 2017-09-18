@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Step 5</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        
+        <h2>
+            Step 5 - Event Control
+        </h2>
+        
+        <br><br>
+        
+        <h3>
+            Error handling for common problems
+        </h3>
+        
+        <br><br>
+        
+        Some changes, enabling the application to react on problems
+        potentially occuring in real life.
+        <br><br>
+        The page is no longer dependent of successfully loading
+        the explanation:
+        <pre>fallback = setTimeout(load_pages, 3001, 0);</pre>
+        invokes content generation even if loading the explanation fails;
+        if it succeeds during 3 seconds,
+        <pre>clearTimeout(fallback);</pre>
+        will delete the timeout.
+        <br><br>
+        AJAX will be handled more generic:
+        <pre>load_content(url, element, callback_function);</pre>
+        will treat internet address [<i>url</i>], explanation content zone [<i>element</i>] and success action [<i>callback_function</i>]
+        as parameters to make it reusable for potential other AJAX calls.
+        <br>
+        Loading will only be seen as successful if <b><i>meta</i></b> - tags
+        can be found (displaying <b>404</b> messages usually is unwanted).
+        <br><br>
+        Content generation is only a simulation of content loading,
+        and content loading can fail.
+        Therefore, every section to fill is observed by
+        <pre>section_content.observer = new MutationObserver(dom_changed);</pre>
+        <br>
+        As long as no change is detected, the next section's generation will not be invoked.
+        <br>
+        This can be checked easily by changing the <code>pages</code> - Array to
+        <pre>var pages = [ "Part 1", "", "Part 3", "Part 4", "Part 5" ];</pre>
+        for testing purpose.
+        <br><br>
+        Finally, one of the first three sections
+        will be expanded with dummy content
+        to demonstrate the following sections will move.
+        
+        <br><br>
+        
+    </body>
+</html>

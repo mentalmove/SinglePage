@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Step 8</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        
+        <h2>
+            Step 8 - Scroll Down PartII
+        </h2>
+        
+        <br><br>
+        
+        <h3>
+            Generating content only when needed
+        </h3>
+        
+        <br><br>
+        
+        Now, content shall only be generated on demand.
+        The rule is easy: Whenever the actual visible section
+        is the last one of the page, a new one shall be created.
+        Therefore,
+        <pre>load_pages(section.index + 1);</pre>
+        from
+        <pre>dom_changed()</pre>
+        shall move to
+        <pre>compare_sections()</pre>
+        and be written as
+        <pre>if ( i == (sections.length - 1) )
+    load_pages(sections.length);</pre>
+        <br>
+        That makes two changes in <code>dom_changed()</code> necessary:
+        <br>
+        Firstly, <code>get_position(section);</code>
+        must be called directly after inserting the section into the DOM
+        (a potential scroll event would need this information).
+        <br>
+        Secondly, <code>compare_sections(true);</code>
+        must be called here at least when the first section is created -
+        otherwise, without a scroll event,
+        <br>
+        a second section will never be built,
+        and without a second section, a scroll event will never be fired.
+        
+        <br><br>
+        
+    </body>
+</html>

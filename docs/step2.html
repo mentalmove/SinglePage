@@ -4,22 +4,47 @@
         <title>Step 2</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
-        <style type="text/css">
-            code, pre {
-                background-color: #F8F8F8;
-            }
-            pre {
-                padding: 8px 15px;
-                border-radius: 5px;
-                border: 1px solid #E5E5E5;
-                margin-top: 1rem;
-            }
-        </style>
     </head>
     <body>
         
-        Step 2
+        <h2>
+            Step 2 - Valid HTML
+        </h2>
+        
+        <br><br>
+        
+        <h3>
+            Introducing Javascript to handle the overlay
+        </h3>
+        
+        <br><br>
+        
+        Sometimes, Javascript is easier than CSS
+        (and leads to even more valid code when unwanted
+        browser cleverness shall be circumvented).
+        <br><br><br>
+        The overlay holds a simple <b><i>span</i></b> - tag
+        working as a button; when clicked, it informs
+        <pre>close_explanation()</pre>
+        about itself. <code>close_explanation()</code>
+        forces the argument's parent node
+        (i.e. the overlay) to disappear.
+        <br><br>
+        To hide the overlay permanently for own experiments,
+        <pre>display: none;</pre>
+        can be added to the properties of class <i>explanation</i>.
+        <br><br>
+        Alternatively, something like
+        <pre>&lt;script type="text/javascript"&gt;
+        document.getElementsByClassName("explanation")[0].style.display = "none";
+&lt;/script&gt;</pre>
+        or
+        <pre>&lt;script type="text/javascript"&gt;
+        close_explanation( document.getElementsByClassName("close_explanation")[0] );
+&lt;/script&gt;</pre>
+could be written below the <b><i>div</i></b> - tag holding the explanation.
+
+        <br><br>
         
     </body>
 </html>

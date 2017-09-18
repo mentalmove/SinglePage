@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Step 4</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        
+        <h2>
+            Step 4 - Generated Content
+        </h2>
+        
+        <br><br>
+        
+        <h3>
+            Generated content instead of static HTML
+        </h3>
+        
+        <br><br>
+        
+        It is an immanent property of this type of application
+        that the page holds more content than the window can display at once.
+        <br>
+        For latency reasons, initially invisible parts
+        should not be rendered immediately.
+        <br><br>
+        To simplify things, content shall be completely generated
+        (not loaded), and the logic when to show it
+        shall be reduced to
+        <i>All content at once after closing the overlay</i>.
+        <br><br>
+        The amount of sections shall be limited by
+        <tt>Array</tt> <code>pages</code>
+        <br>
+        which also defines the respective sections' content
+        (it will hold the URLs to load later).
+        <br><br>
+        Sections are created using
+        <pre>document.createElement("div")</pre>
+        and then appended using the command
+        <pre>appendChild()</pre>
+        <br>
+        Previously defined CSS classes are used so that only the properties that differ,
+        <br>
+        <code>backgroundColor</code> and <code>innerHTML</code>,
+        <br>
+        must be mentioned separately.
+        
+    </body>
+</html>
