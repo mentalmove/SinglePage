@@ -84,7 +84,7 @@ win_dow.history.pushState("", "Title", pages[stored_index]);
     function load_content (url, element, callback_function) {
         var receiveReq = new XMLHttpRequest();
         if ( receiveReq.readyState == 4 || receiveReq.readyState == 0 ) {
-            receiveReq.open("GET", url, true);
+            receiveReq.open("GET", url + "?random=" + Math.ceil(Math.random() * 998), true);
             receiveReq.onreadystatechange = function () {
                 content_loaded(receiveReq, element, callback_function);
             };
