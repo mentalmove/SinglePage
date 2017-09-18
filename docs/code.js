@@ -27,7 +27,7 @@
                         load_pages(sections.length);
                     highlight(i);
                     if ( stored_index >= 0 )
-;//win_dow.history.pushState("", "Title", pages[i]);
+win_dow.history.pushState("", "Title", pages[i]);
                     stored_index = i;
                     window_height = get_window_height();
                     return;
@@ -41,7 +41,7 @@
             if ( (actual.yy - scroll_y) > (window_height - SCROLL_UP_TOLERANCE) ) {
                 stored_index--;
                 highlight(stored_index);
-//win_dow.history.pushState("", "Title", pages[stored_index]);
+win_dow.history.pushState("", "Title", pages[stored_index]);
             }
         }
     }
@@ -109,7 +109,7 @@
         a.href = branches_base + branches[branch_index];
         title_link.appendChild(a);
         section.appendChild(title_link);
-console.log( branches_base + branches[branch_index] );
+//console.log( branches_base + branches[branch_index] );
     }
 
     function create_section (index) {
@@ -173,7 +173,6 @@ console.log( branches_base + branches[branch_index] );
             if ( !pages[i].match(/\.html$/) )
                 pages[i] = pages[i] + ".html";
         get_basic_content();
-        //load_pages(0);
         docu_ment.body.onscroll = on_scroll;
         setInterval(check_section_data, 3456);
     }
@@ -185,5 +184,5 @@ console.log( branches_base + branches[branch_index] );
   );
   
 function demonstrate () {
-    init("index", "step1"/*, "step2"*/);
+    init("index", "step1");
 }
